@@ -3,6 +3,8 @@ package com.example.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.management.Query;
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +19,13 @@ public class SignUpInformationService {
 
     // Add SignUpInformation
     public SignUpInformation createSignUpInformation(SignUpInformation signUpInformation) {
+//        List<SignUpInformation> duplicateEmailSignUps = signUpInformationRepository.findBySignUpEmail(signUpInformation.getEmail());
+//        if (duplicateEmailSignUps.size() > 0) {
+//            return null;
+//        }
+//        else {
+//            return signUpInformationRepository.save(signUpInformation); // Use save method from repository to save object in DB
+//        }
         return signUpInformationRepository.save(signUpInformation); // Use save method from repository to save object in DB
     }
 
@@ -51,6 +60,45 @@ public class SignUpInformationService {
         }
         else {
             return Optional.empty();
+        }
+    }
+
+    // Get SignUpInformation for the particular Email and Password combination
+    public Optional<SignUpInformation> findSignUpInformationByEmailAndPassword(LoginInformation loginInformation) {
+        return signUpInformationRepository.findByEmailAndPassword(loginInformation.email, loginInformation.password);
+    }
+
+    // function to return if value in the Email field already exists for some document in our DB
+    public Boolean isEmailDuplicate(String signUpEmail) {
+        return signUpInformationRepository.findByEmail(signUpEmail).isPresent();
+    }
+
+    // function to return if value in the Phone field already exists for some document in our DB
+    public Boolean isPhoneDuplicate(String signUpPhone) {
+        return signUpInformationRepository.findByPhone(signUpPhone).isPresent();
+    }
+
+    // function to return if value in the Email field already exists for some document in our DB not considering the document of the ID being updated
+    public Boolean isEmailDuplicate(String signUpEmail, String signUpID) {
+
+        Optional<SignUpInformation> existingSignUpInformation = signUpInformationRepository.findByEmail(signUpEmail);
+
+        if(existingSignUpInformation.isPresent() && !existingSignUpInformation.get().getId().equals(signUpID)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    // function to return if value in the Phone field already exists for some document in our DB not considering the document of the ID being updated
+    public Boolean isPhoneDuplicate(String signUpPhone, String signUpID) {
+        Optional<SignUpInformation> existingSignUpInformation = signUpInformationRepository.findByPhone(signUpPhone);
+        if(existingSignUpInformation.isPresent() && !existingSignUpInformation.get().getId().equals(signUpID)) {
+            return true;
+        }
+        else {
+            return false;
         }
     }
 

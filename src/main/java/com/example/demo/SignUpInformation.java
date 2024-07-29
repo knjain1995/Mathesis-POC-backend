@@ -22,5 +22,5 @@ public class SignUpInformation {
     private Date dateofbirth;
     private String password;
     private boolean newsletterintent;
-
+    
 }
