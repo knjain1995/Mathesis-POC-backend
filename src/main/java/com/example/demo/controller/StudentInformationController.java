@@ -40,21 +40,32 @@ public class StudentInformationController {
 
     @GetMapping
     public ResponseEntity<List<StudentInformation>> getAllStudentInformation() {
-        List<StudentInformation> allStudentInformation = studentInformationService.getAllStudentInformation();
-        if (allStudentInformation.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        try {
+            List<StudentInformation> allStudentInformation = studentInformationService.getAllStudentInformation();
+            if (allStudentInformation.isEmpty()) {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+            else {
+                return new ResponseEntity<>(allStudentInformation, HttpStatus.OK);
+            }
         }
-        else {
-            return new ResponseEntity<>(allStudentInformation, HttpStatus.OK);
+        catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+
 //        return new ResponseEntity<>(allStudentInformation, HttpStatus.OK);
     }
 
 
     @GetMapping("/{studentId}")
     public ResponseEntity<StudentInformation> getStudentInformation(@PathVariable String studentId) {
-        Optional<StudentInformation> studentInformationForId = studentInformationService.getStudentInformation(studentId);
-        return studentInformationForId.map(res -> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        try {
+            Optional<StudentInformation> studentInformationForId = studentInformationService.getStudentInformation(studentId);
+            return studentInformationForId.map(res -> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        }
+        catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{studentId}")
@@ -79,8 +90,13 @@ public class StudentInformationController {
 
     @DeleteMapping("/{studentId}")
     public ResponseEntity<StudentInformation> deleteStudentInformation(@PathVariable String studentId) {
-        Optional<StudentInformation> deletedStudentInformation = studentInformationService.deleteStudentInformation(studentId);
-        return deletedStudentInformation.map(res -> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        try {
+            Optional<StudentInformation> deletedStudentInformation = studentInformationService.deleteStudentInformation(studentId);
+            return deletedStudentInformation.map(res -> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        }
+        catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

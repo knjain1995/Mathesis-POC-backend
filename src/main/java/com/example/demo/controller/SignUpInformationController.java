@@ -27,23 +27,33 @@ public class SignUpInformationController {
     // maps HTTP GET requests to api/signup to the method signUpInformation
     @GetMapping
     public ResponseEntity<List<SignUpInformation>> getAllSignUpInformation() {
-        List<SignUpInformation> allSignUpInformation = signUpInformationService.getAllSignUpInformation();
-        if (allSignUpInformation.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-        else {
-            return new ResponseEntity<>(allSignUpInformation, HttpStatus.OK);
-        }
+        try {
+            List<SignUpInformation> allSignUpInformation = signUpInformationService.getAllSignUpInformation();
+            if (allSignUpInformation.isEmpty()) {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+            else {
+                return new ResponseEntity<>(allSignUpInformation, HttpStatus.OK);
+            }
 //        System.out.println(allSignUpInformation);
 //        return new ResponseEntity<>(allSignUpInformation, HttpStatus.OK);
+        }
+        catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     // maps HTTP GET requests for specific id to api/ signup to the method signUpInformation
     @GetMapping("/{signUpID}")
     public ResponseEntity<SignUpInformation> getSignUpInformationById(@PathVariable String signUpID) {
-        Optional<SignUpInformation> signUpInformation = signUpInformationService.getSignUpInformationById(signUpID);
+        try {
+            Optional<SignUpInformation> signUpInformation = signUpInformationService.getSignUpInformationById(signUpID);
 //        System.out.println(signUpInformation);
-        return signUpInformation.map(res -> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            return signUpInformation.map(res -> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        }
+        catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     // maps HTTP POST requests to api/signup to the method signUpInformation
@@ -87,7 +97,7 @@ public class SignUpInformationController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+}
     // maps HTTP Post request with login credentials to api/signup/login to check if login data is present and return SignUp Information
 //    @PostMapping("/checkLoginCredentials")
 //    public ResponseEntity<SignUpInformation> checkLoginCredentials(@RequestBody LoginInformation loginInformation) {
@@ -95,4 +105,4 @@ public class SignUpInformationController {
 //        return loggedInSignUpData.map(res-> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
 //    }
 
-}
+
