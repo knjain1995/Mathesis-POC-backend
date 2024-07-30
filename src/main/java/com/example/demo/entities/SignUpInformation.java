@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Data   // lombok
-@Document()   // MongoDB, indicates that below class is a document for MongoDB
+@Document   // MongoDB, indicates that below class is a document for MongoDB
 public class SignUpInformation {
 
     @Id // indicates this is id / PRIMARY KEY

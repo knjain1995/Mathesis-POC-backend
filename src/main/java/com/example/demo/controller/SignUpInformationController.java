@@ -28,8 +28,14 @@ public class SignUpInformationController {
     @GetMapping
     public ResponseEntity<List<SignUpInformation>> getAllSignUpInformation() {
         List<SignUpInformation> allSignUpInformation = signUpInformationService.getAllSignUpInformation();
+        if (allSignUpInformation.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        else {
+            return new ResponseEntity<>(allSignUpInformation, HttpStatus.OK);
+        }
 //        System.out.println(allSignUpInformation);
-        return new ResponseEntity<>(allSignUpInformation, HttpStatus.OK);
+//        return new ResponseEntity<>(allSignUpInformation, HttpStatus.OK);
     }
 
     // maps HTTP GET requests for specific id to api/ signup to the method signUpInformation
@@ -66,7 +72,7 @@ public class SignUpInformationController {
             return new ResponseEntity<>(updatedSignUpInformation, HttpStatus.OK);
         }
         catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 

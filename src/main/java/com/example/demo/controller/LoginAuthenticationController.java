@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/signup")
+@RequestMapping("/api/checkLoginCredentials")
 @CrossOrigin(origins = "http://localhost:4200")
 public class LoginAuthenticationController {
 
@@ -20,7 +20,7 @@ public class LoginAuthenticationController {
     private SignUpInformationService signUpInformationService;
 
     // maps HTTP Post request with login credentials to api/signup/login to check if login data is present and return SignUp Information
-    @PostMapping("/checkLoginCredentials")
+    @PostMapping
     public ResponseEntity<SignUpInformation> checkLoginCredentials(@RequestBody LoginInformation loginInformation) {
         Optional<SignUpInformation> loggedInSignUpData = signUpInformationService.findSignUpInformationByEmailAndPassword(loginInformation);
         return loggedInSignUpData.map(res-> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
