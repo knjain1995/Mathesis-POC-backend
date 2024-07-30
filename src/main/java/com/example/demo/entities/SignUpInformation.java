@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.entities;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -22,5 +22,5 @@ public class SignUpInformation {
     private Date dateofbirth;
     private String password;
     private boolean newsletterintent;
-    
+
 }

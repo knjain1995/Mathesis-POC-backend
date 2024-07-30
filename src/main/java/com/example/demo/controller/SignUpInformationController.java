@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.controller;
 
+import com.example.demo.entities.SignUpInformation;
+import com.example.demo.services.SignUpInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
 // @RestController: indicates that class is a controller which handles web requests it @Controller + @ResponseBody - handles http requests and response in response body
 // @RequestMapping: maps http requests to specified path to this controller class. All requests to this API will be handled by methods in this class
@@ -82,10 +83,10 @@ public class SignUpInformationController {
     }
 
     // maps HTTP Post request with login credentials to api/signup/login to check if login data is present and return SignUp Information
-    @PostMapping("/checkLoginCredentials")
-    public ResponseEntity<SignUpInformation> checkLoginCredentials(@RequestBody LoginInformation loginInformation) {
-        Optional<SignUpInformation> loggedInSignUpData = signUpInformationService.findSignUpInformationByEmailAndPassword(loginInformation);
-        return loggedInSignUpData.map(res-> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-    }
+//    @PostMapping("/checkLoginCredentials")
+//    public ResponseEntity<SignUpInformation> checkLoginCredentials(@RequestBody LoginInformation loginInformation) {
+//        Optional<SignUpInformation> loggedInSignUpData = signUpInformationService.findSignUpInformationByEmailAndPassword(loginInformation);
+//        return loggedInSignUpData.map(res-> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+//    }
 
 }
