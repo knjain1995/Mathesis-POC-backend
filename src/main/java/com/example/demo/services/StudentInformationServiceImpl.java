@@ -1,11 +1,11 @@
 package com.example.demo.services;
 
+import com.example.demo.DTO.StudentInformationDTO;
 import com.example.demo.entities.StudentInformation;
 import com.example.demo.repositories.StudentInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +17,9 @@ public class StudentInformationServiceImpl implements StudentInformationService 
 
     @Override
     public StudentInformation createStudentInformation(StudentInformation studentInformation) {
+        if (isStudentInformationDuplicate(studentInformation)) {
+            throw new RuntimeException("Duplicate Student Information Found");
+        }
         return studentInformationRepository.save(studentInformation);
     }
 
@@ -34,6 +37,9 @@ public class StudentInformationServiceImpl implements StudentInformationService 
     public Optional<StudentInformation> updateStudentInformation(String studentId, StudentInformation studentInformation) {
         Optional<StudentInformation> studentInformationToBeUpdated = studentInformationRepository.findById(studentId);
         if (studentInformationToBeUpdated.isPresent()) {
+           if(isStudentInformationDuplicate(studentInformationToBeUpdated.get(), studentId)) {
+               throw new RuntimeException("Duplicate Student Information Found");
+           }
             studentInformation.setId(studentId);
             return Optional.of(studentInformationRepository.save(studentInformation));
         }
@@ -55,6 +61,32 @@ public class StudentInformationServiceImpl implements StudentInformationService 
         }
     }
 
+
+//    private StudentInformation mapToEntity(StudentInformationDTO studentInformationDTO) {
+//        StudentInformation studentInformation = new StudentInformation();
+//        studentInformation.setStudentEmail(studentInformationDTO.getStudentEmail());
+//
+//    }
+
+
+
+    // in case of creating new studentInformation check if value of any of the three fields (studentEmail, studentPhoneNumber, studentIDNumber)
+    // matches the field value in the current form
+    @Override
+    public Boolean isStudentInformationDuplicate(StudentInformation studentInformation) {
+        return isStudentEmailDuplicate(studentInformation.getStudentEmail()) ||
+                isStudentPhoneNumberDuplicate(studentInformation.getStudentPhoneNumber()) ||
+                isStudentIdNumberDuplicate(studentInformation.getStudentIDNumber());
+    }
+
+    // check if value of any of the three fields (studentEmail, studentPhoneNumber, studentIDNumber) matches the field value in the current form
+    // but in case of editing the form ignore the forms own value present in the database
+    @Override
+    public Boolean isStudentInformationDuplicate(StudentInformation studentInformation, String studentID) {
+        return isStudentEmailDuplicate(studentInformation.getStudentEmail(), studentID) ||
+                isStudentPhoneNumberDuplicate(studentInformation.getStudentPhoneNumber(), studentID) ||
+                isStudentIdNumberDuplicate(studentInformation.getStudentIDNumber(), studentID);
+    }
 
     @Override
     public Boolean isStudentEmailDuplicate(String studentEmail) {

@@ -22,7 +22,12 @@ public interface StudentInformationService {
     // Delete Operation
     public Optional<StudentInformation> deleteStudentInformation(String studentId);
 
+
     // Duplicate check function
+    public Boolean isStudentInformationDuplicate(StudentInformation studentInformation);
+//
+    public Boolean isStudentInformationDuplicate(StudentInformation studentInformation, String studentId);
+
     public Boolean isStudentEmailDuplicate(String studentEmail);
 
     public Boolean isStudentPhoneNumberDuplicate(String studentPhoneNumber);
