@@ -21,9 +21,8 @@ public class LoginAuthenticationController {
 
     // maps HTTP Post request with login credentials to api/signup/login to check if login data is present and return SignUp Information
     @PostMapping
-    public ResponseEntity<SignUpInformation> checkLoginCredentials(@RequestBody LoginInformation loginInformation) {
-        Optional<SignUpInformation> loggedInSignUpData = signUpInformationService.findSignUpInformationByEmailAndPassword(loginInformation);
-        return loggedInSignUpData.map(res-> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    public ResponseEntity<?> checkLoginCredentials(@RequestBody LoginInformation loginInformation) {
+        return signUpInformationService.findSignUpInformationByEmailAndPassword(loginInformation);
     }
 
 }

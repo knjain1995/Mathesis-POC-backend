@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entities.SignUpInformation;
 import com.example.demo.services.SignUpInformationService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,85 +25,36 @@ public class SignUpInformationController {
     @Autowired
     private SignUpInformationService signUpInformationService;
 
+    // maps HTTP POST requests to api/signup to the method signUpInformation
+    @PostMapping
+    public ResponseEntity<?> signUpInformation(@RequestBody SignUpInformation signUpInformation) {  //get signup information as response body
+        return signUpInformationService.createSignUpInformation(signUpInformation);
+    }
+
     // maps HTTP GET requests to api/signup to the method signUpInformation
     @GetMapping
-    public ResponseEntity<List<SignUpInformation>> getAllSignUpInformation() {
-        try {
-            List<SignUpInformation> allSignUpInformation = signUpInformationService.getAllSignUpInformation();
-            if (allSignUpInformation.isEmpty()) {
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-            }
-            else {
-                return new ResponseEntity<>(allSignUpInformation, HttpStatus.OK);
-            }
-//        System.out.println(allSignUpInformation);
-//        return new ResponseEntity<>(allSignUpInformation, HttpStatus.OK);
-        }
-        catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> getAllSignUpInformation() {
+        return signUpInformationService.getAllSignUpInformation();
     }
 
     // maps HTTP GET requests for specific id to api/ signup to the method signUpInformation
     @GetMapping("/{signUpID}")
-    public ResponseEntity<SignUpInformation> getSignUpInformationById(@PathVariable String signUpID) {
-        try {
-            Optional<SignUpInformation> signUpInformation = signUpInformationService.getSignUpInformationById(signUpID);
-//        System.out.println(signUpInformation);
-            return signUpInformation.map(res -> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        }
-        catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    // maps HTTP POST requests to api/signup to the method signUpInformation
-    @PostMapping
-    public ResponseEntity<SignUpInformation> signUpInformation(@RequestBody SignUpInformation signUpInformation) {  //get signup information as response body
-        try {
-            if(signUpInformationService.isEmailDuplicate(signUpInformation.getEmail()) | signUpInformationService.isPhoneDuplicate(signUpInformation.getPhone())) {
-                return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-            }
-            SignUpInformation createdSignUpInformation = signUpInformationService.createSignUpInformation(signUpInformation);
-            return new ResponseEntity<>(createdSignUpInformation, HttpStatus.CREATED);
-        }
-        catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> getSignUpInformationById(@PathVariable String signUpID) {
+        return signUpInformationService.getSignUpInformationById(signUpID);
     }
 
     // maps HTTP PUT request for specified id to api/ signup to the method signUpInformation
     @PutMapping("/{signUpID}")
-    public ResponseEntity<SignUpInformation> updateSignUpInformation(@PathVariable String signUpID, @RequestBody SignUpInformation signUpInformation) {
-        try {
-            if(signUpInformationService.isEmailDuplicate(signUpInformation.getEmail(), signUpID) | signUpInformationService.isPhoneDuplicate(signUpInformation.getPhone(), signUpID)) {
-                return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-            }
-            SignUpInformation updatedSignUpInformation = signUpInformationService.updateSignUpInformation(signUpID, signUpInformation);
-            return new ResponseEntity<>(updatedSignUpInformation, HttpStatus.OK);
-        }
-        catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> updateSignUpInformation(@PathVariable String signUpID, @RequestBody SignUpInformation signUpInformation) {
+        return signUpInformationService.updateSignUpInformation(signUpID, signUpInformation);
     }
 
     // maps HTTP DELETE request for specified id to api/ signup to the method signUpInformation
     @DeleteMapping("/{signUpID}")
-    public ResponseEntity<SignUpInformation> deleteSignUpInformation(@PathVariable String signUpID) {
-        try {
-            Optional<SignUpInformation> deletedSignUpInformation = signUpInformationService.deleteSignUpInformation(signUpID);
-            return deletedSignUpInformation.map(res -> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-        }
-        catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<?> deleteSignUpInformation(@PathVariable String signUpID) {
+        return signUpInformationService.deleteSignUpInformation(signUpID);
     }
+
 }
-    // maps HTTP Post request with login credentials to api/signup/login to check if login data is present and return SignUp Information
-//    @PostMapping("/checkLoginCredentials")
-//    public ResponseEntity<SignUpInformation> checkLoginCredentials(@RequestBody LoginInformation loginInformation) {
-//        Optional<SignUpInformation> loggedInSignUpData = signUpInformationService.findSignUpInformationByEmailAndPassword(loginInformation);
-//        return loggedInSignUpData.map(res-> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-//    }
 
 

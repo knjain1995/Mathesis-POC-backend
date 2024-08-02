@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.entities.LoginInformation;
 import com.example.demo.entities.SignUpInformation;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,33 +11,45 @@ import java.util.Optional;
 public interface SignUpInformationService {
 
     // Add SignUpInformation
-    public SignUpInformation createSignUpInformation(SignUpInformation signUpInformation);
+    ResponseEntity<?> createSignUpInformation(SignUpInformation signUpInformation);
 
     // Get all SignUpInformation
-    public List<SignUpInformation> getAllSignUpInformation();
+//    List<SignUpInformation> getAllSignUpInformation();
+    ResponseEntity<?> getAllSignUpInformation();
 
     // Get SignUpInformation for particular ID
-    public Optional<SignUpInformation> getSignUpInformationById(String signUpID);
+    ResponseEntity<?> getSignUpInformationById(String signUpID);
 
     // Update SignUpInformation for the particular ID
-    public SignUpInformation updateSignUpInformation(String signUpID, SignUpInformation signUpInformation);
+    ResponseEntity<?> updateSignUpInformation(String signUpID, SignUpInformation signUpInformation);
 
     // Delete SignUpInformation for the particular ID
-    public Optional<SignUpInformation> deleteSignUpInformation(String signUpID);
+    ResponseEntity<?> deleteSignUpInformation(String signUpID);
 
     // Get SignUpInformation for the particular Email and Password combination
-    public Optional<SignUpInformation> findSignUpInformationByEmailAndPassword(LoginInformation loginInformation);
+    ResponseEntity<?> findSignUpInformationByEmailAndPassword(LoginInformation loginInformation);
+
+    //////////////////////////////
+    // Duplicate check function //
+    //////////////////////////////
 
     // function to return if value in the Email field already exists for some document in our DB
-    public Boolean isEmailDuplicate(String signUpEmail);
+    Boolean isEmailDuplicate(String signUpEmail);
 
     // function to return if value in the Phone field already exists for some document in our DB
-    public Boolean isPhoneDuplicate(String signUpPhone);
+    Boolean isPhoneDuplicate(String signUpPhone);
 
     // function to return if value in the Email field already exists for some document in our DB not considering the document of the ID being updated
-    public Boolean isEmailDuplicate(String signUpEmail, String signUpID);
+    Boolean isEmailDuplicate(String signUpEmail, String signUpID);
 
     // function to return if value in the Phone field already exists for some document in our DB not considering the document of the ID being updated
-    public Boolean isPhoneDuplicate(String signUpPhone, String signUpID);
+    Boolean isPhoneDuplicate(String signUpPhone, String signUpID);
+
+    // function to check if Student information is duplicate
+    Boolean isSignUpInformationDuplicate(SignUpInformation signUpInformation);
+
+    // function to check if Student information is duplicate
+    Boolean isSignUpInformationDuplicate(SignUpInformation signUpInformation, String signUpID);
+
 
 }
