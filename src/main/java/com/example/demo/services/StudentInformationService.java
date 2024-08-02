@@ -1,6 +1,8 @@
 package com.example.demo.services;
 
 import com.example.demo.entities.StudentInformation;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,18 +10,18 @@ import java.util.Optional;
 public interface StudentInformationService {
 
     // Create Operation
-    StudentInformation createStudentInformation (StudentInformation studentInformation);
+    ResponseEntity<?> createStudentInformation (StudentInformation studentInformation);
 
     // Read Operations
-    Optional<StudentInformation> getStudentInformation(String studentId);
+    ResponseEntity<?> getStudentInformation(String studentId);
 
-    List<StudentInformation> getAllStudentInformation();
+    ResponseEntity<?> getAllStudentInformation();
 
     // Update Operation
-    Optional<StudentInformation> updateStudentInformation(String studentId, StudentInformation studentInformation);
+    ResponseEntity<?> updateStudentInformation(String studentId, StudentInformation studentInformation);
 
     // Delete Operation
-    Optional<StudentInformation> deleteStudentInformation(String studentId);
+    ResponseEntity<?> deleteStudentInformation(String studentId);
 
 
     // Duplicate check function

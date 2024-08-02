@@ -6,6 +6,8 @@ import com.example.demo.Exceptions.StudentInformationNotFoundException;
 import com.example.demo.entities.StudentInformation;
 import com.example.demo.repositories.StudentInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,13 +20,12 @@ public class StudentInformationServiceImpl implements StudentInformationService 
     private StudentInformationRepository studentInformationRepository;
 
     @Override
-    public StudentInformation createStudentInformation(StudentInformation studentInformation) {
+    public ResponseEntity<?> createStudentInformation(StudentInformation studentInformation) {
         if (isStudentInformationDuplicate(studentInformation)) {
             throw new DuplicateStudentInformationException(StudentInformationErrorMessage.DUPLICATE_STUDENT_INFO.getStudentInformationErrorMessage());
-//            throw new RuntimeException("Duplicate Student Information Found");
         }
         try {
-            return studentInformationRepository.save(studentInformation);
+            return new ResponseEntity<>(studentInformationRepository.save(studentInformation), HttpStatus.OK);
         }
         catch (RuntimeException ex) {
             throw new RuntimeException(StudentInformationErrorMessage.ERROR_CREATING_STUDENT_INFO.getStudentInformationErrorMessage(), ex);
@@ -32,30 +33,37 @@ public class StudentInformationServiceImpl implements StudentInformationService 
     }
 
     @Override
-    public Optional<StudentInformation> getStudentInformation(String studentId) {
-        Optional<StudentInformation> studentInformation = studentInformationRepository.findById(studentId);
-        if (!studentInformation.isPresent()) {
+    public ResponseEntity<?> getStudentInformation(String studentId) {
+        StudentInformation studentInformation = studentInformationRepository.findById(studentId).orElse(null);
+        if (studentInformation == null) {
             throw new StudentInformationNotFoundException(StudentInformationErrorMessage.STUDENT_INFO_NOT_FOUND.getStudentInformationErrorMessage());
         }
-        return studentInformation;
+        try {
+            return new ResponseEntity<>(studentInformation, HttpStatus.OK);
+        }
+        catch (RuntimeException ex) {
+            throw new RuntimeException(StudentInformationErrorMessage.ERROR_RETRIEVING_STUDENT_INFO.getStudentInformationErrorMessage(), ex);
+        }
     }
 
     @Override
-    public List<StudentInformation> getAllStudentInformation() {
+    public ResponseEntity<?> getAllStudentInformation() {
         List<StudentInformation> studentInformationList = studentInformationRepository.findAll();
         if (studentInformationList.isEmpty()) {
             throw new StudentInformationNotFoundException(StudentInformationErrorMessage.STUDENT_INFO_NOT_FOUND.getStudentInformationErrorMessage());
         }
-        return studentInformationList;
+
+        return new ResponseEntity<>(studentInformationList, HttpStatus.OK);
+//        return studentInformationList;
     }
 
     @Override
-    public Optional<StudentInformation> updateStudentInformation(String studentId, StudentInformation studentInformation) {
+    public ResponseEntity<?> updateStudentInformation(String studentId, StudentInformation studentInformation) {
 
-        Optional<StudentInformation> studentInformationToBeUpdated = studentInformationRepository.findById(studentId);
-        System.out.println("StudentInfoDuplicate: "+isStudentInformationDuplicate(studentInformationToBeUpdated.get(), studentId));
+        StudentInformation studentInformationToBeUpdated = studentInformationRepository.findById(studentId).orElse(null);
+//        System.out.println("StudentInfoDuplicate: "+isStudentInformationDuplicate(studentInformationToBeUpdated.get(), studentId));
 
-        if (!studentInformationToBeUpdated.isPresent()) {
+        if (studentInformationToBeUpdated == null) {
             throw new StudentInformationNotFoundException(StudentInformationErrorMessage.STUDENT_INFO_NOT_FOUND.getStudentInformationErrorMessage());
         }
 
@@ -64,9 +72,31 @@ public class StudentInformationServiceImpl implements StudentInformationService 
 //               throw new RuntimeException("Duplicate Student Information Found");
         }
 
-        studentInformation.setId(studentId);
+//        studentInformation.setId(studentId);
+        studentInformationToBeUpdated.setStudentFirstName(studentInformation.getStudentFirstName());
+        studentInformationToBeUpdated.setStudentLastName(studentInformation.getStudentLastName());
+        studentInformationToBeUpdated.setStudentEmail(studentInformation.getStudentEmail());
+        studentInformationToBeUpdated.setStudentPhoneNumber(studentInformation.getStudentPhoneNumber());
+        studentInformationToBeUpdated.setStudentDateOfBirth(studentInformation.getStudentDateOfBirth());
+        studentInformationToBeUpdated.setStudentPresentAddress(studentInformation.getStudentPresentAddress());
+        studentInformationToBeUpdated.setStudentIDNumber(studentInformation.getStudentIDNumber());
+        studentInformationToBeUpdated.setStudentAcademicYear(studentInformation.getStudentAcademicYear());
+        studentInformationToBeUpdated.setStudentNationality(studentInformation.getStudentNationality());
+        studentInformationToBeUpdated.setStudentScholarshipStatus(studentInformation.getStudentScholarshipStatus());
+        studentInformationToBeUpdated.setStudentScholarshipsGained_CheveningScholarship(studentInformation.isStudentScholarshipsGained_CheveningScholarship());
+        studentInformationToBeUpdated.setStudentScholarshipsGained_DeansScholarship(studentInformation.isStudentScholarshipsGained_DeansScholarship());
+        studentInformationToBeUpdated.setStudentScholarshipsGained_Other(studentInformation.getStudentScholarshipsGained_Other());
+        studentInformationToBeUpdated.setStudentDegreeProgram(studentInformation.getStudentDegreeProgram());
+        studentInformationToBeUpdated.setStudentCoreModule1(studentInformation.getStudentCoreModule1());
+        studentInformationToBeUpdated.setStudentCoreModule2(studentInformation.getStudentCoreModule2());
+        studentInformationToBeUpdated.setStudentElectiveModule1(studentInformation.getStudentElectiveModule1());
+        studentInformationToBeUpdated.setStudentElectiveModule2(studentInformation.getStudentElectiveModule2());
+        studentInformationToBeUpdated.setStudentElectiveModule3(studentInformation.getStudentElectiveModule3());
+
+
         try {
-            return Optional.of(studentInformationRepository.save(studentInformation));
+            return new ResponseEntity<>(studentInformationRepository.save(studentInformationToBeUpdated), HttpStatus.OK);
+//            return new ResponseEntity<>(studentInformationRepository.) Optional.of(studentInformationRepository.save(studentInformation));
         }
         catch (RuntimeException ex) {
             throw new RuntimeException(StudentInformationErrorMessage.ERROR_UPDATING_STUDENT_INFO.getStudentInformationErrorMessage(), ex);
@@ -76,16 +106,18 @@ public class StudentInformationServiceImpl implements StudentInformationService 
 
 
     @Override
-    public Optional<StudentInformation> deleteStudentInformation(String studentId) {
-        Optional<StudentInformation> studentInformationToBeDeleted = studentInformationRepository.findById(studentId);
+    public ResponseEntity<?> deleteStudentInformation(String studentId) {
+        StudentInformation studentInformationToBeDeleted = studentInformationRepository.findById(studentId).orElse(null);
 
-        if (!studentInformationToBeDeleted.isPresent()) {
+        if (studentInformationToBeDeleted == null) {
             throw new StudentInformationNotFoundException(StudentInformationErrorMessage.STUDENT_INFO_NOT_FOUND.getStudentInformationErrorMessage());
         }
 
         try {
-            studentInformationRepository.delete(studentInformationToBeDeleted.get());
-            return studentInformationToBeDeleted;
+            studentInformationRepository.delete(studentInformationToBeDeleted);
+            return new ResponseEntity<>(studentInformationToBeDeleted, HttpStatus.OK);
+//            studentInformationRepository.delete(studentInformationToBeDeleted.get());
+//            return studentInformationToBeDeleted;
         }
         catch (RuntimeException ex) {
             throw new RuntimeException(StudentInformationErrorMessage.ERROR_DELETING_STUDENT_INFO.getStudentInformationErrorMessage(), ex);
