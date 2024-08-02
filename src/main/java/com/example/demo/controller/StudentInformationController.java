@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTO.StudentInformationDTO;
 import com.example.demo.entities.StudentInformation;
 import com.example.demo.services.StudentInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,10 @@ public class StudentInformationController {
 
 //    Create Operation
     @PostMapping
-    public ResponseEntity<?> createStudentInformation(@RequestBody StudentInformation studentInformation) {
+    public ResponseEntity<?> createStudentInformation(@RequestBody StudentInformationDTO studentInformationDTO) {
 //        StudentInformation createdStudentInformation = studentInformationService.createStudentInformation(studentInformation);
 //        return new ResponseEntity<>(createdStudentInformation, HttpStatus.CREATED);
-        return studentInformationService.createStudentInformation(studentInformation);
+        return studentInformationService.createStudentInformation(studentInformationDTO);
     }
 
     @GetMapping
@@ -41,10 +42,10 @@ public class StudentInformationController {
     }
 
     @PutMapping("/{studentId}")
-    public ResponseEntity<?> updateStudentInformation(@PathVariable String studentId, @RequestBody StudentInformation studentInformation) {
+    public ResponseEntity<?> updateStudentInformation(@PathVariable String studentId, @RequestBody StudentInformationDTO studentInformationDTO) {
 //        Optional<StudentInformation> updatedStudentInformation = studentInformationService.updateStudentInformation(studentId, studentInformation);
 //        return updatedStudentInformation.map(res -> new ResponseEntity<>(res, HttpStatus.OK)).orElse(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-        return studentInformationService.updateStudentInformation(studentId, studentInformation);
+        return studentInformationService.updateStudentInformation(studentId, studentInformationDTO);
     }
 
 

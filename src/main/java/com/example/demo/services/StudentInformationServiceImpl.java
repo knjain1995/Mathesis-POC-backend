@@ -1,8 +1,10 @@
 package com.example.demo.services;
 
+import com.example.demo.DTO.StudentInformationDTO;
 import com.example.demo.Enums.StudentInformationErrorMessage;
 import com.example.demo.Exceptions.DuplicateStudentInformationException;
 import com.example.demo.Exceptions.StudentInformationNotFoundException;
+import com.example.demo.Mapper.StudentInformationMapper;
 import com.example.demo.entities.StudentInformation;
 import com.example.demo.repositories.StudentInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +21,18 @@ public class StudentInformationServiceImpl implements StudentInformationService 
     @Autowired
     private StudentInformationRepository studentInformationRepository;
 
+    private final StudentInformationMapper studentInformationMapper = new StudentInformationMapper();
+
     @Override
-    public ResponseEntity<?> createStudentInformation(StudentInformation studentInformation) {
+    public ResponseEntity<?> createStudentInformation(StudentInformationDTO studentInformationDTO) {
+        StudentInformation studentInformation = studentInformationMapper.mapToEntity(studentInformationDTO);
+
         if (isStudentInformationDuplicate(studentInformation)) {
             throw new DuplicateStudentInformationException(StudentInformationErrorMessage.DUPLICATE_STUDENT_INFO.getStudentInformationErrorMessage());
         }
         try {
-            return new ResponseEntity<>(studentInformationRepository.save(studentInformation), HttpStatus.OK);
+            StudentInformation createdStudentInformation = studentInformationRepository.save(studentInformation);
+            return new ResponseEntity<>(studentInformationMapper.mapToDTO(createdStudentInformation), HttpStatus.OK);
         }
         catch (RuntimeException ex) {
             throw new RuntimeException(StudentInformationErrorMessage.ERROR_CREATING_STUDENT_INFO.getStudentInformationErrorMessage(), ex);
@@ -39,7 +46,7 @@ public class StudentInformationServiceImpl implements StudentInformationService 
             throw new StudentInformationNotFoundException(StudentInformationErrorMessage.STUDENT_INFO_NOT_FOUND.getStudentInformationErrorMessage());
         }
         try {
-            return new ResponseEntity<>(studentInformation, HttpStatus.OK);
+            return new ResponseEntity<>(studentInformationMapper.mapToDTO(studentInformation), HttpStatus.OK);
         }
         catch (RuntimeException ex) {
             throw new RuntimeException(StudentInformationErrorMessage.ERROR_RETRIEVING_STUDENT_INFO.getStudentInformationErrorMessage(), ex);
@@ -52,13 +59,14 @@ public class StudentInformationServiceImpl implements StudentInformationService 
         if (studentInformationList.isEmpty()) {
             throw new StudentInformationNotFoundException(StudentInformationErrorMessage.STUDENT_INFO_NOT_FOUND.getStudentInformationErrorMessage());
         }
-
         return new ResponseEntity<>(studentInformationList, HttpStatus.OK);
 //        return studentInformationList;
     }
 
     @Override
-    public ResponseEntity<?> updateStudentInformation(String studentId, StudentInformation studentInformation) {
+    public ResponseEntity<?> updateStudentInformation(String studentId, StudentInformationDTO studentInformationDTO) {
+
+        StudentInformation studentInformation = studentInformationMapper.mapToEntity(studentInformationDTO);
 
         StudentInformation studentInformationToBeUpdated = studentInformationRepository.findById(studentId).orElse(null);
 //        System.out.println("StudentInfoDuplicate: "+isStudentInformationDuplicate(studentInformationToBeUpdated.get(), studentId));
@@ -95,7 +103,8 @@ public class StudentInformationServiceImpl implements StudentInformationService 
 
 
         try {
-            return new ResponseEntity<>(studentInformationRepository.save(studentInformationToBeUpdated), HttpStatus.OK);
+            StudentInformation updatedStudentInformation = studentInformationRepository.save(studentInformationToBeUpdated);
+            return new ResponseEntity<>(studentInformationMapper.mapToDTO(updatedStudentInformation), HttpStatus.OK);
 //            return new ResponseEntity<>(studentInformationRepository.) Optional.of(studentInformationRepository.save(studentInformation));
         }
         catch (RuntimeException ex) {
@@ -115,7 +124,7 @@ public class StudentInformationServiceImpl implements StudentInformationService 
 
         try {
             studentInformationRepository.delete(studentInformationToBeDeleted);
-            return new ResponseEntity<>(studentInformationToBeDeleted, HttpStatus.OK);
+            return new ResponseEntity<>(studentInformationMapper.mapToDTO(studentInformationToBeDeleted), HttpStatus.OK);
 //            studentInformationRepository.delete(studentInformationToBeDeleted.get());
 //            return studentInformationToBeDeleted;
         }

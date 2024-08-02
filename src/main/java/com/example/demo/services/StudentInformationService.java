@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.DTO.StudentInformationDTO;
 import com.example.demo.entities.StudentInformation;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import java.util.Optional;
 public interface StudentInformationService {
 
     // Create Operation
-    ResponseEntity<?> createStudentInformation (StudentInformation studentInformation);
+    ResponseEntity<?> createStudentInformation (StudentInformationDTO studentInformationDTO);
 
     // Read Operations
     ResponseEntity<?> getStudentInformation(String studentId);
@@ -18,7 +19,7 @@ public interface StudentInformationService {
     ResponseEntity<?> getAllStudentInformation();
 
     // Update Operation
-    ResponseEntity<?> updateStudentInformation(String studentId, StudentInformation studentInformation);
+    ResponseEntity<?> updateStudentInformation(String studentId, StudentInformationDTO studentInformationDTO);
 
     // Delete Operation
     ResponseEntity<?> deleteStudentInformation(String studentId);
