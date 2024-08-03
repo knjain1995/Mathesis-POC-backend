@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.entities.SignUpInformation;
+import com.example.demo.DTO.SignUpInformationDTO;
 import com.example.demo.services.SignUpInformationService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +25,8 @@ public class SignUpInformationController {
 
     // maps HTTP POST requests to api/signup to the method signUpInformation
     @PostMapping
-    public ResponseEntity<?> signUpInformation(@RequestBody SignUpInformation signUpInformation) {  //get signup information as response body
-        return signUpInformationService.createSignUpInformation(signUpInformation);
+    public ResponseEntity<?> signUpInformation(@RequestBody SignUpInformationDTO signUpInformationDTO) {  //get signup information as response body
+        return signUpInformationService.createSignUpInformation(signUpInformationDTO);
     }
 
     // maps HTTP GET requests to api/signup to the method signUpInformation
@@ -45,8 +43,8 @@ public class SignUpInformationController {
 
     // maps HTTP PUT request for specified id to api/ signup to the method signUpInformation
     @PutMapping("/{signUpID}")
-    public ResponseEntity<?> updateSignUpInformation(@PathVariable String signUpID, @RequestBody SignUpInformation signUpInformation) {
-        return signUpInformationService.updateSignUpInformation(signUpID, signUpInformation);
+    public ResponseEntity<?> updateSignUpInformation(@PathVariable String signUpID, @RequestBody SignUpInformationDTO signUpInformationDTO) {
+        return signUpInformationService.updateSignUpInformation(signUpID, signUpInformationDTO);
     }
 
     // maps HTTP DELETE request for specified id to api/ signup to the method signUpInformation

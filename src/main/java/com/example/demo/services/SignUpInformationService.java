@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.DTO.SignUpInformationDTO;
 import com.example.demo.entities.LoginInformation;
 import com.example.demo.entities.SignUpInformation;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import java.util.Optional;
 public interface SignUpInformationService {
 
     // Add SignUpInformation
-    ResponseEntity<?> createSignUpInformation(SignUpInformation signUpInformation);
+    ResponseEntity<?> createSignUpInformation(SignUpInformationDTO signUpInformationDTO);
 
     // Get all SignUpInformation
 //    List<SignUpInformation> getAllSignUpInformation();
@@ -21,7 +22,7 @@ public interface SignUpInformationService {
     ResponseEntity<?> getSignUpInformationById(String signUpID);
 
     // Update SignUpInformation for the particular ID
-    ResponseEntity<?> updateSignUpInformation(String signUpID, SignUpInformation signUpInformation);
+    ResponseEntity<?> updateSignUpInformation(String signUpID, SignUpInformationDTO signUpInformationDTO);
 
     // Delete SignUpInformation for the particular ID
     ResponseEntity<?> deleteSignUpInformation(String signUpID);

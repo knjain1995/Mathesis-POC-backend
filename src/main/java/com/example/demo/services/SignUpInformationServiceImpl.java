@@ -1,5 +1,7 @@
 package com.example.demo.services;
 
+import com.example.demo.DTO.SignUpInformationDTO;
+import com.example.demo.Mapper.SignUpInformationMapper;
 import com.example.demo.repositories.SignUpInformationRepository;
 import com.example.demo.entities.LoginInformation;
 import com.example.demo.entities.SignUpInformation;
@@ -21,7 +23,9 @@ public class SignUpInformationServiceImpl implements SignUpInformationService {
 
     @Autowired  // Spring will automatically inject an instance of SignUpInformationRepository into this field.
     private SignUpInformationRepository signUpInformationRepository;
-    private final MongoTemplate mongoTemplate;
+//    private final MongoTemplate mongoTemplate;
+
+    private final SignUpInformationMapper signUpInformationMapper = new SignUpInformationMapper();
 
     // now we got our CRUD operations
 
@@ -29,12 +33,14 @@ public class SignUpInformationServiceImpl implements SignUpInformationService {
 
     // Add SignUpInformation
     @Override
-    public ResponseEntity<?> createSignUpInformation(SignUpInformation signUpInformation) {
+    public ResponseEntity<?> createSignUpInformation(SignUpInformationDTO signUpInformationDTO) {
+        SignUpInformation signUpInformation = signUpInformationMapper.mapToEntity(signUpInformationDTO);
+
         if (isSignUpInformationDuplicate(signUpInformation)) {
             return new ResponseEntity<>("Email Or Phone Number Already Used In Another SignUp!", HttpStatus.CONFLICT);
         }
         SignUpInformation savedSignUpInformation = signUpInformationRepository.save(signUpInformation);
-        return new ResponseEntity<>(savedSignUpInformation, HttpStatus.CREATED);
+        return new ResponseEntity<>(signUpInformationMapper.mapToDTO(savedSignUpInformation), HttpStatus.CREATED);
     }
 
     // Get all SignUpInformation
@@ -57,13 +63,16 @@ public class SignUpInformationServiceImpl implements SignUpInformationService {
             return new ResponseEntity<>("Sign Up Details Not Found", HttpStatus.NOT_FOUND);
         }
         else {
-            return new ResponseEntity<>(signUpInformation, HttpStatus.OK);
+            return new ResponseEntity<>(signUpInformationMapper.mapToDTO(signUpInformation), HttpStatus.OK);
         }
     }
 
     // Update SignUpInformation for the particular ID
     @Override
-    public ResponseEntity<?> updateSignUpInformation(String signUpID, SignUpInformation signUpInformation) {
+    public ResponseEntity<?> updateSignUpInformation(String signUpID, SignUpInformationDTO signUpInformationDTO) {
+
+        SignUpInformation signUpInformation = signUpInformationMapper.mapToEntity(signUpInformationDTO);
+
         SignUpInformation existingSignUpInformation = signUpInformationRepository.findById(signUpID).orElse(null); // find document with ID
         if (isSignUpInformationDuplicate(signUpInformation, signUpID)) {
             return new ResponseEntity<>("Email Or Phone Number Already Used In Another SignUp!", HttpStatus.CONFLICT);
@@ -80,7 +89,9 @@ public class SignUpInformationServiceImpl implements SignUpInformationService {
         existingSignUpInformation.setPassword(signUpInformation.getPassword());
         existingSignUpInformation.setNewsletterintent(signUpInformation.isNewsletterintent());
 
-        return new ResponseEntity<>(signUpInformationRepository.save(existingSignUpInformation), HttpStatus.OK);
+        SignUpInformation updatedSignUpInformation = signUpInformationRepository.save(existingSignUpInformation);
+
+        return new ResponseEntity<>(signUpInformationMapper.mapToDTO(updatedSignUpInformation), HttpStatus.OK);
     }
 
     // Delete SignUpInformation for the particular ID
