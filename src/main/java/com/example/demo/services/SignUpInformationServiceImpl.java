@@ -1,18 +1,16 @@
 package com.example.demo.services;
 
-import com.example.demo.DTO.SignUpInformationDTO;
-import com.example.demo.Mapper.SignUpInformationMapper;
+import com.example.demo.dto.SignUpInformationDTO;
+import com.example.demo.mappers.SignUpInformationMapper;
 import com.example.demo.repositories.SignUpInformationRepository;
 import com.example.demo.entities.LoginInformation;
 import com.example.demo.entities.SignUpInformation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.management.Query;
 import java.util.List;
 import java.util.Optional;
 

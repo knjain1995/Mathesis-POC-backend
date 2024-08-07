@@ -1,6 +1,6 @@
-package com.example.demo.Exceptions;
+package com.example.demo.exceptions;
 
-import com.example.demo.Enums.StudentInformationErrorMessage;
+import com.example.demo.enums.StudentInformationErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

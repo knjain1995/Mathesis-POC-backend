@@ -1,12 +1,8 @@
 package com.example.demo.services;
 
-import com.example.demo.DTO.StudentInformationDTO;
+import com.example.demo.dto.StudentInformationDTO;
 import com.example.demo.entities.StudentInformation;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface StudentInformationService {
 

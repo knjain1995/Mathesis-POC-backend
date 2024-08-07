@@ -1,13 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.DTO.SignUpInformationDTO;
+import com.example.demo.dto.SignUpInformationDTO;
 import com.example.demo.services.SignUpInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 // @RestController: indicates that class is a controller which handles web requests it @Controller + @ResponseBody - handles http requests and response in response body
 // @RequestMapping: maps http requests to specified path to this controller class. All requests to this API will be handled by methods in this class

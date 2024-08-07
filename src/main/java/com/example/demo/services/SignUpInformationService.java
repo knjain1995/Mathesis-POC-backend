@@ -1,12 +1,9 @@
 package com.example.demo.services;
 
-import com.example.demo.DTO.SignUpInformationDTO;
+import com.example.demo.dto.SignUpInformationDTO;
 import com.example.demo.entities.LoginInformation;
 import com.example.demo.entities.SignUpInformation;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
-import java.util.Optional;
 
 // indicates that this is a spring managed service component which should be picked up during component scanning (Service Layer)
 public interface SignUpInformationService {

@@ -1,6 +1,6 @@
-package com.example.demo.Mapper;
+package com.example.demo.mappers;
 
-import com.example.demo.DTO.SignUpInformationDTO;
+import com.example.demo.dto.SignUpInformationDTO;
 import com.example.demo.entities.SignUpInformation;
 
 public class SignUpInformationMapper {

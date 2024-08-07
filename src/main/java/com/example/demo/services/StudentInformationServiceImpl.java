@@ -1,10 +1,10 @@
 package com.example.demo.services;
 
-import com.example.demo.DTO.StudentInformationDTO;
-import com.example.demo.Enums.StudentInformationErrorMessage;
-import com.example.demo.Exceptions.DuplicateStudentInformationException;
-import com.example.demo.Exceptions.StudentInformationNotFoundException;
-import com.example.demo.Mapper.StudentInformationMapper;
+import com.example.demo.dto.StudentInformationDTO;
+import com.example.demo.enums.StudentInformationErrorMessage;
+import com.example.demo.exceptions.DuplicateStudentInformationException;
+import com.example.demo.exceptions.StudentInformationNotFoundException;
+import com.example.demo.mappers.StudentInformationMapper;
 import com.example.demo.entities.StudentInformation;
 import com.example.demo.repositories.StudentInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
