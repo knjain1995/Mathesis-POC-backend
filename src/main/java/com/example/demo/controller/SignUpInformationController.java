@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.*;
 // @RequestMapping: maps http requests to specified path to this controller class. All requests to this API will be handled by methods in this class
 // @CrossOrigin: allows cross origin requests from the specified origin. It enables web servers to support requests from different origins
 
-
+//@RequestMapping("/api/signup")
 @RestController
-@RequestMapping("/api/signup")
 @CrossOrigin(origins = "http://localhost:4200")
 public class SignUpInformationController {
 
@@ -21,31 +20,31 @@ public class SignUpInformationController {
     private SignUpInformationService signUpInformationService;
 
     // maps HTTP POST requests to api/signup to the method signUpInformation
-    @PostMapping
-    public ResponseEntity<?> signUpInformation(@RequestBody SignUpInformationDTO signUpInformationDTO) {  //get signup information as response body
-        return signUpInformationService.createSignUpInformation(signUpInformationDTO);
-    }
+//    @PostMapping("/api/authenticate/signup")
+//    public ResponseEntity<?> signUpInformation(@RequestBody SignUpInformationDTO signUpInformationDTO) {  //get signup information as response body
+//        return signUpInformationService.createSignUpInformation(signUpInformationDTO);
+//    }
 
     // maps HTTP GET requests to api/signup to the method signUpInformation
-    @GetMapping
+    @GetMapping("/api/signup")
     public ResponseEntity<?> getAllSignUpInformation() {
         return signUpInformationService.getAllSignUpInformation();
     }
 
     // maps HTTP GET requests for specific id to api/ signup to the method signUpInformation
-    @GetMapping("/{signUpID}")
+    @GetMapping("/api/signup/{signUpID}")
     public ResponseEntity<?> getSignUpInformationById(@PathVariable String signUpID) {
         return signUpInformationService.getSignUpInformationById(signUpID);
     }
 
     // maps HTTP PUT request for specified id to api/ signup to the method signUpInformation
-    @PutMapping("/{signUpID}")
+    @PutMapping("/api/signup/{signUpID}")
     public ResponseEntity<?> updateSignUpInformation(@PathVariable String signUpID, @RequestBody SignUpInformationDTO signUpInformationDTO) {
         return signUpInformationService.updateSignUpInformation(signUpID, signUpInformationDTO);
     }
 
     // maps HTTP DELETE request for specified id to api/ signup to the method signUpInformation
-    @DeleteMapping("/{signUpID}")
+    @DeleteMapping("/api/signup/{signUpID}")
     public ResponseEntity<?> deleteSignUpInformation(@PathVariable String signUpID) {
         return signUpInformationService.deleteSignUpInformation(signUpID);
     }

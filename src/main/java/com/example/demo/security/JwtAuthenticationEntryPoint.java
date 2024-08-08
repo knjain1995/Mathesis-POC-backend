@@ -17,10 +17,10 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     // Handles exception when an unauthenticated user tries to access a locked resource
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);    // set response error as unauthorized
 
         PrintWriter writer = response.getWriter();
-        writer.println("Access Denied!!"+authException.getMessage());
+        writer.println("Access Denied!!"+authException.getMessage());   // print in console
     }
 
 }

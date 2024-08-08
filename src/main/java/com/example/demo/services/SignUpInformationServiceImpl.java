@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,9 @@ public class SignUpInformationServiceImpl implements SignUpInformationService {
 
     private final SignUpInformationMapper signUpInformationMapper = new SignUpInformationMapper();
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     // now we got our CRUD operations
 
     // Create of CRUD operations
@@ -37,6 +41,11 @@ public class SignUpInformationServiceImpl implements SignUpInformationService {
         if (isSignUpInformationDuplicate(signUpInformation)) {
             return new ResponseEntity<>("Email Or Phone Number Already Used In Another SignUp!", HttpStatus.CONFLICT);
         }
+
+        // ENCODING PASSWORD
+        String encodedPassword = passwordEncoder.encode(signUpInformation.getPassword());
+        signUpInformation.setPassword(encodedPassword);
+
         SignUpInformation savedSignUpInformation = signUpInformationRepository.save(signUpInformation);
         return new ResponseEntity<>(signUpInformationMapper.mapToDTO(savedSignUpInformation), HttpStatus.CREATED);
     }
