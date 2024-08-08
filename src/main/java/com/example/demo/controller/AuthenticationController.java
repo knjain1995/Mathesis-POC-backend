@@ -6,6 +6,7 @@ import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.services.SignUpInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,8 +42,9 @@ public class AuthenticationController {
             authenticationManager.authenticate(authenticationToken);
 //            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginInformation.getEmail(), loginInformation.getPassword()));
         } catch (Exception e) {
-            System.out.println("Authentication failed");
-            throw new Exception("Incorrect username or password", e);
+            System.out.println("Authentication Failed");
+            return new ResponseEntity<>("Incorrect Credentials!", HttpStatus.UNAUTHORIZED);
+//            throw new Exception("Incorrect username or password", e);
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(loginInformation.getEmail());

@@ -20,7 +20,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);    // set response error as unauthorized
 
         PrintWriter writer = response.getWriter();
-        writer.println("Access Denied!!"+authException.getMessage());   // print in console
+//        writer.println("Access Denied!! "+authException.getMessage());
+        writer.println("Session Expired! Please Login Again!");
     }
 
 }
