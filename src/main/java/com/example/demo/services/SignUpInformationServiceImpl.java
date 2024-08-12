@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.dto.SignUpInformationDTO;
+import com.example.demo.enums.Role;
 import com.example.demo.mappers.SignUpInformationMapper;
 import com.example.demo.repositories.SignUpInformationRepository;
 import com.example.demo.entities.LoginInformation;
@@ -46,6 +47,7 @@ public class SignUpInformationServiceImpl implements SignUpInformationService {
         String encodedPassword = passwordEncoder.encode(signUpInformation.getPassword());
         signUpInformation.setPassword(encodedPassword);
 
+        signUpInformation.setRole(Role.USER);
         SignUpInformation savedSignUpInformation = signUpInformationRepository.save(signUpInformation);
         return new ResponseEntity<>(signUpInformationMapper.mapToDTO(savedSignUpInformation), HttpStatus.CREATED);
     }

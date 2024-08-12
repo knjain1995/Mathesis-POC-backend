@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.example.demo.enums.Role;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -22,5 +23,5 @@ public class SignUpInformation {
     private Date dateofbirth;
     private String password;
     private boolean newsletterintent;
-
+    private Role role;
 }

@@ -1,10 +1,16 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.SignUpInformationDTO;
+import com.example.demo.security.JwtUtil;
 import com.example.demo.services.SignUpInformationService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // @RestController: indicates that class is a controller which handles web requests it @Controller + @ResponseBody - handles http requests and response in response body
 // @RequestMapping: maps http requests to specified path to this controller class. All requests to this API will be handled by methods in this class
@@ -18,6 +24,8 @@ public class SignUpInformationController {
     // injects SignUpInformationService in the controller which responsible for handling business logic related to signup information
     @Autowired
     private SignUpInformationService signUpInformationService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     // maps HTTP POST requests to api/signup to the method signUpInformation
 //    @PostMapping("/api/authenticate/signup")
@@ -26,28 +34,44 @@ public class SignUpInformationController {
 //    }
 
     // maps HTTP GET requests to api/signup to the method signUpInformation
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/api/signup")
     public ResponseEntity<?> getAllSignUpInformation() {
         return signUpInformationService.getAllSignUpInformation();
     }
 
     // maps HTTP GET requests for specific id to api/ signup to the method signUpInformation
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/api/signup/{signUpID}")
     public ResponseEntity<?> getSignUpInformationById(@PathVariable String signUpID) {
         return signUpInformationService.getSignUpInformationById(signUpID);
     }
 
     // maps HTTP PUT request for specified id to api/ signup to the method signUpInformation
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/api/signup/{signUpID}")
     public ResponseEntity<?> updateSignUpInformation(@PathVariable String signUpID, @RequestBody SignUpInformationDTO signUpInformationDTO) {
         return signUpInformationService.updateSignUpInformation(signUpID, signUpInformationDTO);
     }
 
     // maps HTTP DELETE request for specified id to api/ signup to the method signUpInformation
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/api/signup/{signUpID}")
     public ResponseEntity<?> deleteSignUpInformation(@PathVariable String signUpID) {
         return signUpInformationService.deleteSignUpInformation(signUpID);
     }
+
+//    @GetMapping("/api/checkRole")
+//    public ResponseEntity<?> checkRole(HttpServletRequest request) {
+//        String authorizationHeader = request.getHeader("Authorization");
+//        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+//            String jwt = authorizationHeader.substring(7);
+//            List<String> roles = jwtUtil.extractRoles(jwt); // Extract roles from the token
+//            return ResponseEntity.ok(roles); // Return roles as response
+//        }
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No token provided");
+//    }
+
 
 }
 

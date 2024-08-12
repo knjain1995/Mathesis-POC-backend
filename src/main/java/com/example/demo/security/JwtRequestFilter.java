@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 // THIS IS THE JWT REQUEST FILTER WHICH INTERCEPTS REQUESTS AND VALIDATES JWT TOKENS. CALLED ONCE FOR EACH AND EVERY REQUEST
 @Component
@@ -28,7 +31,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil jwtUtil;
 
-
 //  overridden to implement the logic for filtering requests
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -36,6 +38,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 //  retrieves the Authorization header from the request to check for a Bearer token
         final String authorizationHeader = request.getHeader("Authorization");
+
+        System.out.println("Authorization Header: " + authorizationHeader);
 
         String username = null;
         String jwt = null;
@@ -55,7 +59,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //  Validate jwt token using the method in jwtUtil
             if (jwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
+                System.out.println("Authorities: " + userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
 //  Authentication data will set for the user for that request by setting the authentication property of the SecurityContext using the SecurityContextHolder

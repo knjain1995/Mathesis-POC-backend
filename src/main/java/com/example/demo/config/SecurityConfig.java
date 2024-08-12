@@ -21,7 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 // Configure Spring Security in configuration file
 // Override configure methods to set up security rules, authentication manager, and add JWT filter
 // @Configuration: Indicates that this class has @Bean definitions that should be processed by the
-// Spring container to generate bean definitions and service requests for those beans at runtime
+// Spring container to generate Bean definitions and service requests for those beans at runtime
+// @EnableWebSecurity: enables Spring Security web security support.
 // SecurityFilterChain: is an interface in Spring Security that represents a filter chain
 // configuration for web security. It allows you to define the security configurations for different
 // HTTP requests, such as authentication, authorization, exception handling, and session management.
@@ -57,14 +58,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         System.out.println("securityFilterChain");
-        httpSecurity.csrf(csrf -> csrf.disable())   // Disables CSRF protection.
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/authenticate/checkLoginCredentials", "/api/authenticate/signup").permitAll() // Allow public access to auth endpoints
+        httpSecurity.csrf(csrf -> csrf.disable())   // Disables CSRF protection. Usually done in stateless API applications
+                .authorizeHttpRequests(authz -> authz   //
+                        .requestMatchers("/api/authenticate/**").permitAll() // Allow public access to auth endpoints
+                        .requestMatchers("/api/signup", "/api/signup/**").hasRole("ADMIN") // Only Admin can access these endpoints
                         .anyRequest().authenticated() // Secure all other endpoints
                 )
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint)) // Handle unauthorized access attempts
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Use stateless sessions
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint)) // sets the custom entry point to handle authentication exceptions
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // This configures the application to be stateless, which is typical for JWT-based authentication
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); // adds the custom JWT filter before the standard UsernamePasswordAuthenticationFilter
 
         return httpSecurity.build();
     }
